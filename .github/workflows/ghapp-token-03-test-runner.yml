@@ -1,0 +1,13 @@
+name: ghapp-token-03-test-runner
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  test:
+    runs-on: [self-hosted, runner-ghapp-token]
+    steps:
+      - name: Run script
+        run: |
+          echo "Hello!"

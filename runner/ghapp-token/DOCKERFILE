@@ -1,0 +1,15 @@
+FROM ghcr.io/actions/actions-runner:latest
+
+USER root
+
+# install curl and jq
+RUN apt-get update && apt-get install -y curl jq && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY ./runner/ghapp-token/entrypoint.sh ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
+
+USER runner
+
+ENTRYPOINT ["./entrypoint.sh"]
