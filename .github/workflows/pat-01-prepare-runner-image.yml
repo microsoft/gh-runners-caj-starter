@@ -1,0 +1,46 @@
+name: pat-01-prepare-runner-image
+
+env:
+  AZ_RG_NAME: "rg-ghrunner-pat"
+  AZ_LOCATION: "westeurope"
+  AZ_CR_NAME: "crghrunnerpat"
+  IMAGE_NAME: "gh-runner-pat:1.0"
+  DOCKERFILE_PATH: "./runner/pat/DOCKERFILE"
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZ_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZ_TENANT_ID }}
+          subscription-id: ${{ secrets.AZ_SUBSCRIPTION_ID }}
+
+      - name: Create resource group
+        run: |
+          az group create -n $AZ_RG_NAME -l $AZ_LOCATION
+
+      - name: Create container registry
+        run: |
+          az acr create -n $AZ_CR_NAME -g $AZ_RG_NAME -l $AZ_LOCATION --sku basic --admin-enabled true
+
+      - name: Build and push runner image
+        run: |
+          az acr build -r $AZ_CR_NAME -g $AZ_RG_NAME -t $IMAGE_NAME -f $DOCKERFILE_PATH .
+
+      - name: Azure logout
+        run: |
+          az logout

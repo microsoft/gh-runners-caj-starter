@@ -1,0 +1,13 @@
+name: pat-03-test-runner
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  test:
+    runs-on: [self-hosted, runner-pat]
+    steps:
+      - name: Run script
+        run: |
+          echo "Hello!"
