@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1.12.0
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         id: create-app-token
         with:
           app-id: ${{ secrets.GH_APP_ID }}
@@ -32,7 +32,7 @@ jobs:
           skip-token-revoke: true
 
       - name: Azure login
-        uses: azure/login@7184910d9eb2b1c5e48f7073824a90609bb9b6d6 # v2.3.1
+        uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
         with:
           client-id: ${{ secrets.AZ_CLIENT_ID }}
           tenant-id: ${{ secrets.AZ_TENANT_ID }}
